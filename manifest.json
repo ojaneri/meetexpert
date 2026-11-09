@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "MeetExpert",
-  "version": "0.7.3",
-  "description": "Captura as legendas ao vivo do Google Meet, do Microsoft Teams (web) e do Zoom (web) e arquiva transcricoes diarizadas com timestamps.",
+  "version": "0.8.0",
+  "description": "Captura as legendas ao vivo do Google Meet, Microsoft Teams e Zoom, arquiva transcricoes diarizadas e oferece Live Analysis com IA local ou remota.",
   "author": {
     "email": "osvaldo@perito.digital"
   },
@@ -17,7 +17,13 @@
     "https://teams.live.com/*",
     "https://teams.cloud.microsoft/*",
     "https://*.teams.microsoft.us/*",
-    "https://*.zoom.us/*"
+    "https://*.zoom.us/*",
+    "http://localhost:11434/*",
+    "http://127.0.0.1:11434/*",
+    "http://localhost:1234/*",
+    "http://127.0.0.1:1234/*",
+    "https://openrouter.ai/*",
+    "https://generativelanguage.googleapis.com/*"
   ],
   "background": {
     "service_worker": "background.js"

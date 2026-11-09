@@ -1,11 +1,31 @@
-# MeetExpert 0.7.2
+# MeetExpert 0.8.0
 
 Captura as legendas ao vivo do **Google Meet**, do **Microsoft Teams (web)** e do
-**Zoom (web)** e
-arquiva as transcricoes, diarizadas e com timestamps. Sem bot na sala, sem
-gravar audio.
+**Zoom (web)**, arquiva as transcricoes diarizadas e oferece **Live Analysis em tempo real com IA** (local ou em nuvem). Sem bot na sala, sem gravar audio.
 
 Osvaldo Janeri Filho <osvaldo@perito.digital>
+
+---
+
+## Novidade na v0.8.0: ⚡ Live Analysis com IA
+
+Durante uma reunião, clique no botão **⚡ Live Analysis** no balão flutuante para abrir o painel inteligente com:
+- **O que está acontecendo**: resumo contínuo das discussões em 2 a 4 linhas.
+- **Sugestão de fala (1ª pessoa)**: frases e momentos oportunos para intervir na conversa, ajustadas ao seu papel (Perito Judicial, Advogado, Líder, Participante).
+- **Histórico**: histórico navegável das análises geradas durante a chamada.
+- **Controles**: botão `↻ Atualizar`, contagem regressiva e controle deslizante de intervalo (15s a 300s).
+- **Painel móvel**: pode ser arrastado, minimizado (`—`) ou fechado (`×`) sem parar a gravação.
+
+### Como configurar a IA:
+1. Clique no ícone do MeetExpert na barra de extensões do Chrome.
+2. Clique na aba **⚙️ IA**.
+3. Escolha o seu provedor:
+   - **Local (Ollama)**: 100% privado e gratuito, rodando na sua máquina.
+     - Dê duplo-clique no arquivo `instalar-ia-local.bat` na pasta da extensão para instalar o Ollama e baixar o modelo recomendado (**Qwen 2.5 3B** ~1.9 GB).
+     - No popup, clique em **Detectar** para listar os modelos locais e em **Testar Conexão**.
+   - **Remoto Gratuito (OpenRouter)**: use modelos como `Gemini 2.0 Flash` ou `Llama 3.3 70B` sem consumir recursos do seu PC. Basta colocar a sua chave gratuita do OpenRouter.
+   - **Google Gemini API**: coloque a chave de API gratuita do Google AI Studio.
+   - **Personalizado**: conecte a qualquer endpoint compatível com OpenAI (LM Studio, vLLM, etc.).
 
 ---
 

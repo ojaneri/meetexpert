@@ -8,16 +8,147 @@
 <body>
   <header>
     <img src="icons/icon32.png" width="20" height="20" alt="">
-    <h1>Reuniões gravadas</h1>
-    <span id="stat" class="stat"></span>
+    <h1 id="headerTitle">MeetExpert</h1>
+    <div class="header-nav">
+      <button id="tabMeetings" class="nav-btn active" title="Reuniões gravadas">Reuniões</button>
+      <button id="tabSettings" class="nav-btn" title="Configurar Live Analysis e IA">⚙️ IA</button>
+    </div>
   </header>
 
-  <ul id="meetings" class="meetings" aria-live="polite"></ul>
+  <!-- Painel 1: Lista de reunioes -->
+  <main id="viewMeetings" class="view active">
+    <div class="subhead">
+      <span id="stat" class="stat"></span>
+    </div>
+    <ul id="meetings" class="meetings" aria-live="polite"></ul>
+    <footer>
+      <button id="openArchive" class="link">Abrir arquivo completo</button>
+      <span class="hint">PDF, busca e edição</span>
+    </footer>
+  </main>
 
-  <footer>
-    <button id="openArchive" class="link">Abrir arquivo completo</button>
-    <span class="hint">PDF, busca e edição ficam no arquivo</span>
-  </footer>
+  <!-- Painel 2: Configuracoes de IA para Live Analysis -->
+  <main id="viewSettings" class="view">
+    <div class="settings-body">
+      <div class="section-title">⚡ Live Analysis — Provedor de IA</div>
+      
+      <div class="form-group">
+        <label for="aiProvider">Provedor:</label>
+        <select id="aiProvider" class="input">
+          <option value="ollama">Local — Ollama (Privado &amp; Gratuito)</option>
+          <option value="openrouter">Remoto — OpenRouter (Modelos Free)</option>
+          <option value="gemini">Remoto — Google Gemini API (Gratuito)</option>
+          <option value="custom">Personalizado (OpenAI Compatível)</option>
+        </select>
+      </div>
+
+      <!-- Secao Ollama -->
+      <div id="cfgOllama" class="cfg-section">
+        <div class="form-group">
+          <label for="ollamaUrl">URL do Ollama:</label>
+          <input type="text" id="ollamaUrl" class="input" value="http://localhost:11434">
+        </div>
+        <div class="form-group">
+          <label for="ollamaModel">Modelo Local:</label>
+          <div class="input-row">
+            <select id="ollamaModelSelect" class="input">
+              <option value="qwen2.5:3b">Qwen 2.5 3B (~1.9 GB) [Recomendado]</option>
+              <option value="llama3.2:3b">Llama 3.2 3B (~2.0 GB)</option>
+              <option value="qwen2.5:7b">Qwen 2.5 7B (~4.7 GB)</option>
+              <option value="llama3.1:8b">Llama 3.1 8B (~4.9 GB)</option>
+              <option value="custom">Outro (digitar)...</option>
+            </select>
+            <button id="btnDetectOllama" class="btn-sm" title="Detectar modelos já baixados no Ollama">Detectar</button>
+          </div>
+          <input type="text" id="ollamaModelCustom" class="input mt-1" placeholder="Nome do modelo no Ollama" style="display:none;">
+          <div class="field-hint">Dica: execute <code>instalar-ia-local.bat</code> na pasta para baixar o modelo.</div>
+        </div>
+      </div>
+
+      <!-- Secao OpenRouter -->
+      <div id="cfgOpenrouter" class="cfg-section" style="display:none;">
+        <div class="form-group">
+          <label for="openrouterKey">API Key do OpenRouter:</label>
+          <input type="password" id="openrouterKey" class="input" placeholder="sk-or-v1-...">
+          <div class="field-hint">Obtenha gratuitamente em <a href="https://openrouter.ai/keys" target="_blank" class="ext-link">openrouter.ai</a></div>
+        </div>
+        <div class="form-group">
+          <label for="openrouterModel">Modelo Free:</label>
+          <select id="openrouterModelSelect" class="input">
+            <option value="google/gemini-2.0-flash-exp:free">Google Gemini 2.0 Flash (Free)</option>
+            <option value="meta-llama/llama-3.3-70b-instruct:free">Meta Llama 3.3 70B (Free)</option>
+            <option value="qwen/qwen-2.5-72b-instruct:free">Qwen 2.5 72B (Free)</option>
+            <option value="custom">Outro modelo...</option>
+          </select>
+          <input type="text" id="openrouterModelCustom" class="input mt-1" placeholder="ex: deepseek/deepseek-r1:free" style="display:none;">
+        </div>
+      </div>
+
+      <!-- Secao Gemini -->
+      <div id="cfgGemini" class="cfg-section" style="display:none;">
+        <div class="form-group">
+          <label for="geminiKey">Chave de API do Google AI Studio:</label>
+          <input type="password" id="geminiKey" class="input" placeholder="AIzaSy...">
+          <div class="field-hint">Obtenha grátis em <a href="https://aistudio.google.com" target="_blank" class="ext-link">aistudio.google.com</a></div>
+        </div>
+        <div class="form-group">
+          <label for="geminiModel">Modelo:</label>
+          <select id="geminiModel" class="input">
+            <option value="gemini-2.0-flash">Gemini 2.0 Flash (Mais rápido)</option>
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Secao Custom -->
+      <div id="cfgCustom" class="cfg-section" style="display:none;">
+        <div class="form-group">
+          <label for="customUrl">Endpoint URL:</label>
+          <input type="text" id="customUrl" class="input" placeholder="http://localhost:1234/v1/chat/completions">
+        </div>
+        <div class="form-group">
+          <label for="customKey">API Key (se houver):</label>
+          <input type="password" id="customKey" class="input" placeholder="Opcional">
+        </div>
+        <div class="form-group">
+          <label for="customModel">Nome do Modelo:</label>
+          <input type="text" id="customModel" class="input" placeholder="ex: local-model">
+        </div>
+      </div>
+
+      <!-- Preferencias de Analise -->
+      <div class="section-title mt-2">Preferências de Análise</div>
+      <div class="form-group">
+        <label for="userRole">Seu papel na reunião:</label>
+        <select id="userRole" class="input">
+          <option value="participante">Participante geral / Colaborador</option>
+          <option value="perito">Perito Judicial / Assistente Técnico</option>
+          <option value="advogado">Advogado / Jurídico</option>
+          <option value="lider">Líder / Coordenador da reunião</option>
+          <option value="cliente">Cliente / Ouvinte</option>
+        </select>
+        <div class="field-hint">A IA adapta as sugestões de fala para a sua função.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="defaultInterval">Intervalo de atualização automática:</label>
+        <select id="defaultInterval" class="input">
+          <option value="30">A cada 30 segundos</option>
+          <option value="45">A cada 45 segundos</option>
+          <option value="60" selected>A cada 60 segundos (Recomendado)</option>
+          <option value="90">A cada 90 segundos</option>
+          <option value="120">A cada 2 minutos</option>
+        </select>
+      </div>
+
+      <div id="testStatus" class="status-box" style="display:none;"></div>
+
+      <div class="action-buttons">
+        <button id="btnTest" class="btn-secondary">Testar Conexão</button>
+        <button id="btnSave" class="btn-primary">Salvar</button>
+      </div>
+    </div>
+  </main>
 
 <script src="format.js"></script>
 <script src="popup.js"></script>

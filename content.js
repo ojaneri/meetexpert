@@ -508,7 +508,50 @@ if (!P) {
     MCG_UI.showModal(rec, txt, hash, filename, { esc, mmss, fmtDate, download, merge: mergeTurns, live: true });
   }
 
-  /* -------------------- loop -------------------- */
+  /* -------------------- loop e live analysis -------------------- */
+
+  MCG_UI.setLiveCallback(async ({ force }) => {
+    if (!S || !S.transcript.length) {
+      MCG_UI.updateLiveAnalysis({
+        time: new Date().toTimeString().slice(0, 8),
+        summary: "Aguardando as primeiras falas na reunião para sintetizar...",
+        suggestion: ""
+      });
+      return;
+    }
+    // Fecha os blocos atuais para incluir ate a ultima fala
+    for (const entry of S.blocks.values()) flush(entry, true);
+
+    const recent = S.transcript.slice(-30);
+    try {
+      chrome.runtime.sendMessage({ type: "LIVE_ANALYZE", entries: recent }, (res) => {
+        if (chrome.runtime.lastError || !res || !res.ok) {
+          MCG_UI.updateLiveAnalysis({
+            time: new Date().toTimeString().slice(0, 8),
+            summary: `Erro ao conectar com a IA: ${res?.error || chrome.runtime.lastError?.message || "Sem resposta"}`,
+            suggestion: "Verifique se a IA local está rodando ou configure a chave de API no ícone da extensão."
+          });
+        } else {
+          MCG_UI.updateLiveAnalysis({
+            time: res.time,
+            summary: res.summary,
+            suggestion: res.suggestion
+          });
+        }
+      });
+    } catch (e) {
+      MCG_UI.updateLiveAnalysis({
+        time: new Date().toTimeString().slice(0, 8),
+        summary: `Falha na requisição: ${e.message}`,
+        suggestion: ""
+      });
+    }
+  });
+
+  // Carrega intervalo configurado
+  chrome.storage.local.get("llm_config").then(({ llm_config }) => {
+    if (llm_config?.intervalSec) MCG_UI.setLiveInterval(llm_config.intervalSec);
+  }).catch(() => {});
 
   function tick() {
     if (!S) {
