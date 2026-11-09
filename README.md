@@ -118,10 +118,9 @@ Se você já utiliza ferramentas como **LM Studio**, **Jan**, **LocalAI** ou um 
 
 ### Personalização do Papel na Reunião
 Na seção **Preferências de Análise**, você pode indicar seu papel principal:
-- *Participante geral / Colaborador*
-- *Perito Judicial / Assistente Técnico especialista* (foco em provas, prazos e teses técnicas)
-- *Advogado / Jurídico* (foco em termos legais e acordos)
-- *Líder / Coordenador da reunião* (foco em encaminhamentos e decisões)
+- *Participante geral / Colaborador* (foco em alinhamento e tarefas)
+- *Líder / Coordenador da reunião* (foco em encaminhamentos, gestão da pauta e decisões)
+- *Cliente / Ouvinte* (foco em acompanhamento de entregas, escopo e esclarecimento de dúvidas)
 
 A IA personalizará o vocabulário e o estilo das sugestões de fala para a função escolhida.
 

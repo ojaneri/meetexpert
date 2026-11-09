@@ -41,8 +41,6 @@ chrome.tabs.onRemoved.addListener((tabId) => enqueue(() => setRecording(tabId, f
 
 const ROLES_MAP = {
   participante: "Participante ativo da reunião / Colaborador",
-  perito: "Perito Judicial / Assistente Técnico especialista. Atenção a detalhes probatórios, prazos e teses técnicas.",
-  advogado: "Advogado / Representante jurídico. Foco em estratégia legal, acordos e termos contratuais.",
   lider: "Líder / Coordenador da reunião. Foco em direcionamento de pauta, alinhamento e decisões.",
   cliente: "Cliente / Ouvinte. Foco em esclarecer dúvidas e acompanhar entregas."
 };
