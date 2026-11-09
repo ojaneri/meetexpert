@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MeetExpert — Manual do Usuário &amp; Documentação Oficial</title>
+  <link rel="icon" type="image/png" href="icons/icon32.png">
+  <style>
+    :root {
+      --ink: #14113c;
+      --ink-soft: #4a4770;
+      --muted: #797699;
+      --bg: #f8f9fc;
+      --card-bg: #ffffff;
+      --rule: #e2e4ed;
+      --rule-soft: #eef0f6;
+      --accent: #ff5733;
+      --accent-soft: #fff1ee;
+      --violet: #4338ca;
+      --violet-light: #eef2ff;
+      --teams: #5b5fc7;
+      --zoom: #0b5cff;
+      --success: #15803d;
+      --success-bg: #f0fdf4;
+      --warning: #b45309;
+      --warning-bg: #fffbeb;
+      --code-bg: #1e1e2f;
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.65 var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* Top Banner / Hero */
+    header.hero {
+      background: linear-gradient(135deg, #18124a 0%, #2b1f7d 60%, #4338ca 100%);
+      color: #fff;
+      padding: 40px 0 46px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 20px rgba(20, 17, 60, 0.12);
+    }
+    .hero-content {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .hero-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .hero-brand img {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      background: #fff;
+      padding: 4px;
+    }
+    .hero-title h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .hero-title p {
+      margin: 4px 0 0;
+      color: #cbd5e1;
+      font-size: 14.5px;
+    }
+    .hero-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Quick Action Bar */
+    .quick-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .action-card {
+      flex: 1;
+      min-width: 220px;
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 16px 20px;
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .action-card:hover {
+      border-color: var(--violet);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(67, 56, 202, 0.08);
+    }
+    .action-card .icon-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: var(--violet-light);
+      color: var(--violet);
+      flex-shrink: 0;
+    }
+    .action-card.green .icon-circle {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+    .action-card.orange .icon-circle {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .action-card h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .action-card p {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Nav / Index */
+    .doc-nav {
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 36px;
+    }
+    .doc-nav h2 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .nav-grid a {
+      color: var(--violet);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 13.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+    }
+    .nav-grid a:hover {
+      text-decoration: underline;
+      color: var(--accent);
+    }
+
+    /* Sections */
+    section.doc-section {
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    section.doc-section h2 {
+      margin: 0 0 16px;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid var(--rule-soft);
+      padding-bottom: 12px;
+    }
+    section.doc-section h3 {
+      margin: 22px 0 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* Callout Boxes */
+    .callout {
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 13.5px;
+      line-height: 1.55;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .callout-info {
+      background: var(--violet-light);
+      border-left: 4px solid var(--violet);
+      color: #2e267a;
+    }
+    .callout-success {
+      background: var(--success-bg);
+      border-left: 4px solid var(--success);
+      color: #14532d;
+    }
+    .callout-warning {
+      background: var(--warning-bg);
+      border-left: 4px solid var(--warning);
+      color: #78350f;
+    }
+
+    /* Code blocks */
+    pre {
+      background: var(--code-bg);
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-size: 13px;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    code {
+      font-family: var(--mono);
+      background: #edf0f7;
+      color: var(--ink);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+    }
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* Steps list */
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+      counter-reset: step-counter;
+    }
+    .steps li {
+      position: relative;
+      padding-left: 42px;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+    .steps li::before {
+      counter-increment: step-counter;
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--violet);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    /* Comparison Table */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13.5px;
+    }
+    table.data-table th, table.data-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--rule);
+    }
+    table.data-table th {
+      background: var(--rule-soft);
+      font-weight: 700;
+      color: var(--ink);
+    }
+    table.data-table tr:hover {
+      background: #fafbfe;
+    }
+
+    /* Footer */
+    footer.doc-footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+    }
+    footer.doc-footer a {
+      color: var(--violet);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer.doc-footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 720px) {
+      section.doc-section { padding: 20px; }
+      .hero-content { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Hero Header -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-brand">
+        <img src="icons/icon128.png" alt="MeetExpert Logo">
+        <div class="hero-title">
+          <h1>MeetExpert — Manual do Usuário</h1>
+          <p>Captura de legendas, diarização criptográfica e Live Analysis com Inteligência Artificial</p>
+        </div>
+      </div>
+      <div class="hero-badges">
+        <span class="badge">🛡️ 100% Local / Privado</span>
+        <span class="badge">⚡ Google Meet · Teams · Zoom</span>
+        <span class="badge">🤖 Ollama · OpenRouter · Gemini</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Quick Navigation / Action Bar -->
+    <div class="quick-actions">
+      <a href="#quick-start" class="action-card green">
+        <div class="icon-circle">🚀</div>
+        <div>
+          <h3>Início Rápido</h3>
+          <p>Instalação no Chrome em 1 minuto</p>
+        </div>
+      </a>
+      <a href="#ia-setup" class="action-card orange">
+        <div class="icon-circle">🤖</div>
+        <div>
+          <h3>Instalar IA Local</h3>
+          <p>Scripts automáticos para Ollama</p>
+        </div>
+      </a>
+      <a href="#how-to-use" class="action-card">
+        <div class="icon-circle">🎙️</div>
+        <div>
+          <h3>Como Usar em Reuniões</h3>
+          <p>Meet, Teams e Zoom web</p>
+        </div>
+      </a>
+      <a href="#export-archive" class="action-card">
+        <div class="icon-circle">📑</div>
+        <div>
+          <h3>Histórico &amp; Perícia</h3>
+          <p>Exportação TXT e PDF com SHA-256</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Navegação / Sumário -->
+    <div class="doc-nav">
+      <h2>Índice da Documentação</h2>
+      <div class="nav-grid">
+        <a href="#overview">1. Visão Geral e Benefícios</a>
+        <a href="#quick-start">2. Instalação no Google Chrome</a>
+        <a href="#ia-setup">3. Instalação e Configuração da IA (Ollama)</a>
+        <a href="#cloud-providers">4. Provedores em Nuvem (OpenRouter e Gemini)</a>
+        <a href="#how-to-use">5. Operação Durante a Reunião</a>
+        <a href="#live-analysis-panel">6. Painel Flutuante de Live Analysis</a>
+        <a href="#export-archive">7. Exportação de Transcrições (PDF e TXT)</a>
+        <a href="#security-privacy">8. Privacidade, Segurança e LGPD</a>
+        <a href="#troubleshooting">9. Solução de Problemas (Troubleshooting)</a>
+      </div>
+    </div>
+
+    <!-- 1. Visão Geral -->
+    <section id="overview" class="doc-section">
+      <h2>1. Visão Geral do MeetExpert</h2>
+      <p>
+        O <strong>MeetExpert</strong> é uma extensão profissional para navegadores baseados no Chromium (Google Chrome, Microsoft Edge, Brave, etc.) projetada para capturar em tempo real as legendas de videoconferências no <strong>Google Meet</strong>, <strong>Microsoft Teams</strong> e <strong>Zoom (web)</strong>.
+      </p>
+      <p>
+        Diferente de ferramentas que injetam robôs barulhentos na reunião ou gravam áudio nos servidores de terceiros, o MeetExpert adota uma <strong>arquitetura 100% no cliente</strong>: ele lê diretamente as legendas nativas geradas na tela do seu navegador, cataloga a fala de cada participante (diarização) com carimbo de tempo (timestamp), calcula a assinatura de integridade SHA-256 e alimenta o assistente <strong>Live Analysis</strong> em tempo real.
+      </p>
+
+      <div class="callout callout-info">
+        <span>💡</span>
+        <div>
+          <strong>Vantagens Chave:</strong>
+          <ul>
+            <li><strong>Invisível:</strong> Sem "bot" na sala pedindo para entrar.</li>
+            <li><strong>Sem captura de áudio:</strong> Opera exclusivamente via legendas de tela, garantindo conformidade com políticas corporativas restritivas.</li>
+            <li><strong>Inteligência Artificial Híbrida:</strong> Funcione 100% offline via Ollama local ou com modelos ultra rápidos em nuvem.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Instalação no Chrome -->
+    <section id="quick-start" class="doc-section">
+      <h2>2. Instalação no Google Chrome</h2>
+      <ol class="steps">
+        <li>
+          <strong>Abra a página de extensões do Chrome:</strong><br>
+          Digite na barra de endereços <code>chrome://extensions/</code> e pressione <strong>Enter</strong>.
+        </li>
+        <li>
+          <strong>Ative o Modo do Desenvolvedor:</strong><br>
+          No canto superior direito da página, ligue a chave seletora <strong>Modo do desenvolvedor</strong>.
+        </li>
+        <li>
+          <strong>Carregue a pasta do MeetExpert:</strong><br>
+          No canto superior esquerdo, clique no botão <strong>Carregar sem compactação</strong> (ou <em>Load unpacked</em>). Selecione a pasta onde o MeetExpert está localizado (a pasta que contém o arquivo <code>manifest.json</code>).
+        </li>
+        <li>
+          <strong>Fixe o ícone na barra de ferramentas:</strong><br>
+          Clique no ícone de quebra-cabeça (Extensões) ao lado da barra de endereços do Chrome, localize o <strong>MeetExpert</strong> e clique no ícone de <strong>alfinete</strong> para fixá-lo.
+        </li>
+      </ol>
+
+      <div class="callout callout-success">
+        <span>✅</span>
+        <div>
+          Pronto! O ícone do MeetExpert estará visível. Ao clicar nele, você poderá ver o histórico de reuniões gravadas, configurar a IA ou acessar este manual.
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. IA Local (Ollama) -->
+    <section id="ia-setup" class="doc-section">
+      <h2>3. Instalação e Configuração da IA Local (Ollama)</h2>
+      <p>
+        Para privacidade total, você pode rodar modelos de linguagem diretamente no seu próprio computador usando o <strong>Ollama</strong>. Nenhum texto ou trecho da reunião sairá da sua máquina.
+      </p>
+
+      <h3>Instalação Automática com 1 Clique (Windows)</h3>
+      <p>
+        O MeetExpert inclui scripts automáticos para configurar tudo para você:
+      </p>
+      <ol class="steps">
+        <li>Abra a pasta do projeto no Windows Explorer.</li>
+        <li>Dê duplo-clique no arquivo <code>instalar-ia-local.bat</code>.</li>
+        <li>
+          O script verificará se o Ollama está instalado. Caso não esteja, ele oferecerá para instalar automaticamente via <code>winget</code>.
+        </li>
+        <li>
+          Um menu interativo permitirá que você selecione o modelo de IA desejado:
+          <pre>1) Qwen 2.5 3B  (~1.9 GB) [RECOMENDADO] - Leve, ultra rápido e excelente em português
+2) Llama 3.2 3B (~2.0 GB) - Modelo compacto da Meta
+3) Qwen 2.5 7B  (~4.7 GB) - Alta capacidade analítica para reuniões técnicas
+4) Llama 3.1 8B (~4.9 GB) - Modelo robusto de 8 bilhões de parâmetros</pre>
+        </li>
+        <li>
+          O script fará o download do modelo e configurará a permissão de acesso do navegador (<code>OLLAMA_ORIGINS=*</code>).
+        </li>
+      </ol>
+
+      <h3>Instalação no Linux ou macOS</h3>
+      <p>Abra o terminal na pasta do projeto e execute:</p>
+      <pre>chmod +x instalar-ia-local.sh
+./instalar-ia-local.sh</pre>
+
+      <h3>Vinculando o Ollama ao MeetExpert</h3>
+      <ol class="steps">
+        <li>Clique no ícone do MeetExpert no navegador e acerte na aba <strong>⚙️ IA</strong>.</li>
+        <li>No campo <strong>Provedor</strong>, selecione <strong>Local — Ollama (Privado &amp; Gratuito)</strong>.</li>
+        <li>Clique no botão <strong>Detectar</strong>. A extensão listará todos os modelos baixados no seu Ollama!</li>
+        <li>Clique em <strong>Testar Conexão</strong>. Você receberá uma confirmação de sucesso com uma amostra de resposta.</li>
+        <li>Clique no botão <strong>Salvar</strong>.</li>
+      </ol>
+    </section>
+
+    <!-- 4. Provedores em Nuvem -->
+    <section id="cloud-providers" class="doc-section">
+      <h2>4. Provedores em Nuvem Gratuitos (Alternativas)</h2>
+      <p>
+        Se você não deseja instalar nada no seu computador ou não possui memória suficiente para rodar um modelo local, o MeetExpert oferece suporte integrado a provedores em nuvem gratuitos:
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Provedor</th>
+            <th>Custo</th>
+            <th>Modelos Recomendados</th>
+            <th>Como Obter a Chave</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>OpenRouter</strong></td>
+            <td>Gratuito (modelos Free)</td>
+            <td><code>google/gemini-2.0-flash-exp:free</code>, <code>meta-llama/llama-3.3-70b-instruct:free</code></td>
+            <td>Acesse <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> e gere uma chave gratuita.</td>
+          </tr>
+          <tr>
+            <td><strong>Google Gemini API</strong></td>
+            <td>Gratuito (tier padrão)</td>
+            <td><code>gemini-2.0-flash</code>, <code>gemini-1.5-flash</code></td>
+            <td>Acesse <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a> e crie uma API Key.</td>
+          </tr>
+          <tr>
+            <td><strong>Personalizado</strong></td>
+            <td>Configurável</td>
+            <td>Qualquer servidor compatível com a API OpenAI (LM Studio, vLLM, etc.)</td>
+            <td>Basta informar a URL do endpoint local ou remoto.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 5. Como Usar em Reuniões -->
+    <section id="how-to-use" class="doc-section">
+      <h2>5. Operação Durante a Reunião</h2>
+      <p>
+        O segredo do MeetExpert é que ele lê as <strong>legendas em tempo real</strong>. Portanto, o único requisito é que as legendas estejam <strong>ligadas</strong> na chamada.
+      </p>
+
+      <h3>Como ativar as legendas:</h3>
+      <ul>
+        <li><strong>Google Meet:</strong> Clique no botão <strong>CC</strong> (Ativar legendas) na barra inferior da chamada. Você pode mudar o idioma das legendas nas configurações de legenda do Meet.</li>
+        <li><strong>Microsoft Teams:</strong> Clique nos três pontos (<strong>...</strong>) no menu superior ou inferior &rarr; <strong>Idioma e fala</strong> &rarr; <strong>Ativar legendas ao vivo</strong>.</li>
+        <li><strong>Zoom (Web Client):</strong> Clique no botão <strong>Mostrar Legendas</strong> na barra de ferramentas inferior.</li>
+      </ul>
+
+      <h3>Indicadores Visuais na Tela:</h3>
+      <ul>
+        <li>
+          <strong>Balão de Gravação (Canto superior esquerdo):</strong> Mostra que a reunião está sendo arquivada com sucesso, indicando o tempo decorrido e a quantidade de trechos capturados.
+        </li>
+        <li>
+          <strong>Painel Flutuante de Live Analysis (Canto direito):</strong> Exibe o resumo do andamento da reunião e sugestões inteligentes de intervenção.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 6. Painel Flutuante de Live Analysis -->
+    <section id="live-analysis-panel" class="doc-section">
+      <h2>6. Painel Flutuante de Live Analysis</h2>
+      <p>
+        O assistente de Live Analysis opera como seu copiloto durante reuniões longas, complexas ou multitarefa:
+      </p>
+      <ul>
+        <li><strong>Síntese do Momento:</strong> Resume o assunto central em discussão no bloco recente.</li>
+        <li><strong>Pontos Críticos:</strong> Lista decisões tomadas, divergências, dúvidas em aberto ou números citados.</li>
+        <li>
+          <strong>Sugestões de Fala (Ready-to-Say):</strong> Frases prontas em primeira pessoa elaboradas com base no seu papel escolhido (Participante, Líder ou Cliente), prontas para você usar quando for solicitada a sua opinião.
+        </li>
+        <li><strong>Adaptação Automática de Idioma:</strong> Se a reunião for conduzida em inglês ou espanhol, as sugestões e o resumo se adaptam automaticamente ao idioma falado pelos participantes!</li>
+        <li><strong>Controle de Intervalo:</strong> Você pode pausar as atualizações automáticas ou clicar em <em>"Atualizar Agora"</em> a qualquer momento.</li>
+      </ul>
+    </section>
+
+    <!-- 7. Histórico e Exportação -->
+    <section id="export-archive" class="doc-section">
+      <h2>7. Arquivo, Histórico e Perícia Digital</h2>
+      <p>
+        Todas as transcrições são gravadas no armazenamento seguro do seu navegador (<code>chrome.storage.local</code>).
+      </p>
+      <p>
+        Ao clicar no ícone da extensão &rarr; <strong>Abrir arquivo completo</strong>, você acessa o Dashboard com:
+      </p>
+      <ul>
+        <li><strong>Busca textual instantânea</strong> em todas as reuniões realizadas.</li>
+        <li><strong>Edição de títulos</strong> e notas personalizadas por sessão.</li>
+        <li><strong>Exportação em formato TXT simples:</strong> Arquivo limpo para documentação interna ou e-mails.</li>
+        <li><strong>Exportação em PDF Formatado:</strong> Diagramação profissional com carimbo de tempo, identificação de oradores e <strong>cálculo do hash SHA-256</strong> da transcrição para fins de auditoria, conformidade e custódia digital.</li>
+      </ul>
+    </section>
+
+    <!-- 8. Segurança e Privacidade -->
+    <section id="security-privacy" class="doc-section">
+      <h2>8. Privacidade, Segurança e LGPD</h2>
+      <div class="callout callout-success">
+        <span>🔒</span>
+        <div>
+          <strong>Privacidade por Design (Privacy by Design):</strong>
+          <ul>
+            <li>Nenhum áudio é captado pelo microfone ou gravado da placa de som.</li>
+            <li>Nenhum dado é enviado para servidores proprietários do MeetExpert.</li>
+            <li>Quando o modo <strong>Ollama Local</strong> é utilizado, <strong>100% do processamento de IA é executado na sua máquina</strong>, mantendo segredo profissional em audiências, perícias e reuniões corporativas confidenciais.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Troubleshooting -->
+    <section id="troubleshooting" class="doc-section">
+      <h2>9. Perguntas Frequentes &amp; Resolução de Problemas</h2>
+      
+      <h3>O balão de gravação não apareceu. O que fazer?</h3>
+      <p>
+        Certifique-se de que você <strong>ligou as legendas</strong> (botão CC no Meet ou Legendas ao Vivo no Teams). O MeetExpert só inicia a gravação quando as primeiras legendas aparecem na chamada.
+      </p>
+
+      <h3>O Ollama não conecta ou dá erro de CORS no Chrome.</h3>
+      <p>
+        O Chrome exige que serviços locais autorizem requisições de extensões. Nosso script <code>instalar-ia-local.bat</code> configura automaticamente a variável <code>OLLAMA_ORIGINS=*</code>. Caso tenha instalado manualmente, feche o Ollama no ícone da bandeja do Windows e inicie-o com:
+      </p>
+      <pre>set OLLAMA_ORIGINS=*
+ollama serve</pre>
+
+      <h3>Como atualizar a extensão após baixar atualizações do Git?</h3>
+      <p>
+        Basta abrir <code>chrome://extensions/</code> e clicar no botão circular de <strong>Recarregar</strong> (🔄) no card do MeetExpert.
+      </p>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="doc-footer">
+      <p>
+        <strong>MeetExpert</strong> — Desenvolvido por <strong>Osvaldo Janeri Filho</strong> (<a href="mailto:osvaldo@perito.digital">osvaldo@perito.digital</a>)
+      </p>
+      <p>
+        Código-fonte oficial disponível no GitHub: <a href="https://github.com/ojaneri/meetexpert" target="_blank">github.com/ojaneri/meetexpert</a>
+      </p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

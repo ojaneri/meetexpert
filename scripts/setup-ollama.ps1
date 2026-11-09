@@ -54,6 +54,15 @@ if (-not $ollamaCmd) {
 Write-Host "[OK] Ollama detectado com sucesso!" -ForegroundColor Green
 [Environment]::SetEnvironmentVariable("OLLAMA_ORIGINS", "*", "User")
 $env:OLLAMA_ORIGINS = "*"
+
+# Garantir que o servico do Ollama esteja ativo
+try {
+    $null = Invoke-RestMethod -Uri "http://localhost:11434" -TimeoutSec 2 -ErrorAction Stop
+} catch {
+    Write-Host "[*] Iniciando o servico do Ollama em segundo plano..." -ForegroundColor Cyan
+    Start-Process -FilePath "ollama" -ArgumentList "serve" -WindowStyle Hidden
+    Start-Sleep -Seconds 3
+}
 Write-Host ""
 
 # 2. Menu de escolha de modelo

@@ -12,6 +12,7 @@
     <div class="header-nav">
       <button id="tabMeetings" class="nav-btn active" title="Reuniões gravadas">Reuniões</button>
       <button id="tabSettings" class="nav-btn" title="Configurar Live Analysis e IA">⚙️ IA</button>
+      <button id="tabDocs" class="nav-btn" title="Manual e Documentação">📖 Ajuda</button>
     </div>
   </header>
 
@@ -23,7 +24,7 @@
     <ul id="meetings" class="meetings" aria-live="polite"></ul>
     <footer>
       <button id="openArchive" class="link">Abrir arquivo completo</button>
-      <span class="hint">PDF, busca e edição</span>
+      <button id="openDocsLink1" class="link doc-link">📖 Manual (HTML)</button>
     </footer>
   </main>
 
@@ -144,6 +145,48 @@
       <div class="action-buttons">
         <button id="btnTest" class="btn-secondary">Testar Conexão</button>
         <button id="btnSave" class="btn-primary">Salvar</button>
+      </div>
+      <div class="footer-note">
+        <button id="openDocsLink2" class="link doc-link">📖 Ver documentação detalhada (HTML)</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Painel 3: Ajuda e Documentacao -->
+  <main id="viewDocs" class="view">
+    <div class="docs-body">
+      <div class="doc-hero-card">
+        <div class="doc-icon">📖</div>
+        <div>
+          <div class="doc-hero-title">MeetExpert — Documentação</div>
+          <div class="doc-hero-desc">Manual completo com ilustrações, atalhos e perícia</div>
+        </div>
+      </div>
+
+      <button id="btnOpenDocsFull" class="btn-primary w-100 btn-docs-launch">
+        🚀 Abrir Manual Completo (HTML)
+      </button>
+
+      <div class="section-title mt-2">Guia Rápido de Uso</div>
+      
+      <div class="help-item">
+        <strong>1. Como Gravar</strong>
+        <p>Basta <b>ligar as legendas</b> na chamada. No Meet clique em <code>CC</code>, no Teams vá em <code>... &gt; Idioma e Fala &gt; Ativar Legendas</code> e no Zoom clique em <code>Mostrar Legendas</code>.</p>
+      </div>
+
+      <div class="help-item">
+        <strong>2. Live Analysis com IA</strong>
+        <p>Durante a reunião, o painel lateral resume os debates e sugere falas prontas em primeira pessoa ajustadas ao seu papel.</p>
+      </div>
+
+      <div class="help-item">
+        <strong>3. IA Local 100% Privada</strong>
+        <p>Execute <code>instalar-ia-local.bat</code> no Windows (ou <code>./instalar-ia-local.sh</code> no Linux/Mac) para baixar o Ollama com o modelo <code>qwen2.5:3b</code>.</p>
+      </div>
+
+      <div class="help-item">
+        <strong>4. Histórico &amp; Perícia</strong>
+        <p>Clique em <em>Abrir arquivo completo</em> para ver todo o acervo, pesquisar termos e exportar em TXT ou PDF com <b>hash SHA-256</b>.</p>
       </div>
     </div>
   </main>

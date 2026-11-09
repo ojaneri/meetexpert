@@ -27,23 +27,42 @@ const DEFAULT_CONFIG = {
 
 $("#tabMeetings").onclick = () => switchTab("meetings");
 $("#tabSettings").onclick = () => switchTab("settings");
+$("#tabDocs").onclick = () => switchTab("docs");
 
 function switchTab(tab) {
+  $("#tabMeetings").classList.toggle("active", tab === "meetings");
+  $("#tabSettings").classList.toggle("active", tab === "settings");
+  $("#tabDocs").classList.toggle("active", tab === "docs");
+
+  $("#viewMeetings").classList.toggle("active", tab === "meetings");
+  $("#viewSettings").classList.toggle("active", tab === "settings");
+  $("#viewDocs").classList.toggle("active", tab === "docs");
+
   if (tab === "meetings") {
-    $("#tabMeetings").classList.add("active");
-    $("#tabSettings").classList.remove("active");
-    $("#viewMeetings").classList.add("active");
-    $("#viewSettings").classList.remove("active");
     $("#headerTitle").textContent = "Reuniões gravadas";
-  } else {
-    $("#tabSettings").classList.add("active");
-    $("#tabMeetings").classList.remove("active");
-    $("#viewSettings").classList.add("active");
-    $("#viewMeetings").classList.remove("active");
+  } else if (tab === "settings") {
     $("#headerTitle").textContent = "Configurar IA";
     loadConfig();
+  } else if (tab === "docs") {
+    $("#headerTitle").textContent = "Ajuda & Manual";
   }
 }
+
+async function openDocumentation() {
+  const url = chrome.runtime.getURL("docs.html");
+  const open = await chrome.tabs.query({ url });
+  if (open.length) {
+    chrome.tabs.update(open[0].id, { active: true });
+    chrome.windows.update(open[0].windowId, { focused: true });
+  } else {
+    chrome.tabs.create({ url });
+  }
+  window.close();
+}
+
+if ($("#btnOpenDocsFull")) $("#btnOpenDocsFull").onclick = openDocumentation;
+if ($("#openDocsLink1")) $("#openDocsLink1").onclick = openDocumentation;
+if ($("#openDocsLink2")) $("#openDocsLink2").onclick = openDocumentation;
 
 /* -------------------- Reunioes Gravadas -------------------- */
 
