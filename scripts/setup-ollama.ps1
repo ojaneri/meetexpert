@@ -8,22 +8,21 @@ Write-Host "============================================================" -Foreg
 Write-Host ""
 
 # 1. Verificar se o Ollama esta instalado
-$ollamaCmd = Get-Command "ollama" -ErrorAction SilentlyContinue
-
-if (-not $ollamaCmd) {
-    # Tentar caminhos padrao do Windows
-    $defaultPaths = @(
-        "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe",
-        "$env:ProgramFiles\Ollama\ollama.exe"
-    )
-    foreach ($p in $defaultPaths) {
-        if (Test-Path $p) {
-            $env:PATH += ";$(Split-Path $p)"
-            $ollamaCmd = Get-Command "ollama" -ErrorAction SilentlyContinue
-            break
+$ollamaPaths = @(
+    "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe",
+    "$env:ProgramFiles\Ollama\ollama.exe"
+)
+foreach ($p in $ollamaPaths) {
+    if (Test-Path $p) {
+        $dir = Split-Path $p
+        if ($env:PATH -notmatch [regex]::Escape($dir)) {
+            $env:PATH = "$dir;" + $env:PATH
         }
+        break
     }
 }
+
+$ollamaCmd = Get-Command "ollama" -ErrorAction SilentlyContinue
 
 if (-not $ollamaCmd) {
     Write-Host "[!] O Ollama nao foi detectado no sistema." -ForegroundColor Yellow
