@@ -1,151 +1,248 @@
-# MeetExpert 0.8.0
+# MeetExpert v0.8.0
 
-Captura as legendas ao vivo do **Google Meet**, do **Microsoft Teams (web)** e do
-**Zoom (web)**, arquiva as transcricoes diarizadas e oferece **Live Analysis em tempo real com IA** (local ou em nuvem). Sem bot na sala, sem gravar audio.
+**Captura de legendas e Live Analysis inteligente para reuniões online (Google Meet, Microsoft Teams e Zoom web)**
 
-Osvaldo Janeri Filho <osvaldo@perito.digital>
+O **MeetExpert** transcreve reuniões em tempo real diretamente das legendas do navegador, com separação de participantes (diarização), timestamps e integridade criptográfica SHA-256. Além disso, conta com um assistente de **Live Analysis com IA** que resume o andamento da reunião e fornece sugestões de intervenção em primeira pessoa (*ready-to-say*), funcionando tanto com **IA Local 100% privada** quanto com **APIs gratuitas em nuvem**.
 
----
+> **Privacidade por design:** Sem bot na sala, sem gravação de áudio e sem envio desnecessário de dados.
 
-## Novidade na v0.8.0: ⚡ Live Analysis com IA
-
-Durante uma reunião, clique no botão **⚡ Live Analysis** no balão flutuante para abrir o painel inteligente com:
-- **O que está acontecendo**: resumo contínuo das discussões em 2 a 4 linhas.
-- **Sugestão de fala (1ª pessoa)**: frases e momentos oportunos para intervir na conversa, ajustadas ao seu papel (Perito Judicial, Advogado, Líder, Participante).
-- **Histórico**: histórico navegável das análises geradas durante a chamada.
-- **Controles**: botão `↻ Atualizar`, contagem regressiva e controle deslizante de intervalo (15s a 300s).
-- **Painel móvel**: pode ser arrastado, minimizado (`—`) ou fechado (`×`) sem parar a gravação.
-
-### Como configurar a IA:
-1. Clique no ícone do MeetExpert na barra de extensões do Chrome.
-2. Clique na aba **⚙️ IA**.
-3. Escolha o seu provedor:
-   - **Local (Ollama)**: 100% privado e gratuito, rodando na sua máquina.
-     - Dê duplo-clique no arquivo `instalar-ia-local.bat` na pasta da extensão para instalar o Ollama e baixar o modelo recomendado (**Qwen 2.5 3B** ~1.9 GB).
-     - No popup, clique em **Detectar** para listar os modelos locais e em **Testar Conexão**.
-   - **Remoto Gratuito (OpenRouter)**: use modelos como `Gemini 2.0 Flash` ou `Llama 3.3 70B` sem consumir recursos do seu PC. Basta colocar a sua chave gratuita do OpenRouter.
-   - **Google Gemini API**: coloque a chave de API gratuita do Google AI Studio.
-   - **Personalizado**: conecte a qualquer endpoint compatível com OpenAI (LM Studio, vLLM, etc.).
+Desenvolvido por: **Osvaldo Janeri Filho** `<osvaldo@perito.digital>`
 
 ---
 
-## Instalar
+## Índice
 
-1. Abra `chrome://extensions`
-2. Ligue o **Modo desenvolvedor** (canto superior direito)
-3. **Carregar sem compactacao** → selecione esta pasta
-4. Fixe o MeetExpert na barra (icone de quebra-cabeca → alfinete)
-
-## Usar
-
-**Durante a reuniao** — entre no Meet, no Teams web ou no Zoom web. A extensao tenta
-ligar as legendas sozinha (no Zoom, ligue voce). Um balao aparece no canto inferior
-esquerdo, e o icone ganha o selo vermelho **REC** enquanto qualquer aba estiver
-gravando:
-
-| balao | significado |
-|---|---|
-| cinza | aguardando as legendas (ligue o CC se ele pedir) |
-| vermelho pulsante | gravando — mostra a contagem de trechos |
-| ambar | salvando, ao detectar o fim |
-| verde | salvo, com o botao **Abrir transcricao** |
-
-**Depois** — clique no icone do MeetExpert. O popup lista as reunioes gravadas,
-separadas por reuniao (cada entrada e saida vira uma gravacao), com o botao **.txt**
-para baixar cada uma; o que esta gravando agora aparece com **REC**. Em **Abrir
-arquivo completo** voce busca, le, exporta em **.pdf**, renomeia e apaga.
-
-Se a extensao for recarregada no meio de uma reuniao, ela se injeta de novo nas
-abas abertas — nao precisa sair e voltar da reuniao.
-
-Se voce fechar a aba no meio, nada se perde: os trechos sao gravados
-continuamente e os metadados a cada 15s. O registro fica marcado como
-**parcial**, com duracao e participantes deduzidos dos proprios trechos.
-
-## Requisitos
-
-- As **legendas precisam estar ligadas**. E delas que o texto sai.
-- **Teams: so no navegador** (`teams.microsoft.com`). O app de desktop e
-  Electron — extensao de Chrome nao alcanca, e nao ha como contornar.
-- No Teams o botao de legendas costuma ficar em *Mais acoes → Idioma e fala*.
-  Se a extensao nao conseguir ligar, o balao cinza avisa.
-- **Zoom: so no navegador** (`app.zoom.us/wc/...`, "Entrar pelo navegador"). O app de
-  desktop nao e alcancavel. Ligue as legendas em *Mais (...) → Legendas*; se a opcao
-  nao existir, o anfitriao nao habilitou legendas na reuniao.
-- No Zoom a legenda mostra so as **iniciais** do falante. A extensao troca pelo nome
-  completo quando o ve na tela (tiles de video, video em destaque ou lista de
-  participantes). Se dois participantes tiverem as mesmas iniciais, fica a sigla.
-
-## Se parar de funcionar
-
-Google e Microsoft trocam a estrutura interna das paginas sem aviso. Quando isso
-acontece, **o ajuste e sempre no `platform.js`** — abra o DevTools na reuniao com
-as legendas ligadas, inspecione um bloco de legenda e corrija:
-
-| sintoma | o que ajustar |
-|---|---|
-| transcricao vazia | `captionRoot`, `captionBlock` |
-| falante sempre "Desconhecido" | `speakerSel` |
-| texto sujo no Teams | `textSel` |
-| nao liga a legenda sozinho | `captionButtonOn` / `captionButtonOff` |
-| participantes faltando | `rosterName` |
-| nao detecta o fim | `leaveScreen`, `inMeeting` |
-| Teams nao captura nada | tente `"all_frames": true` no `manifest.json` |
-
-O restante do codigo nao depende desses seletores.
-
-## Aviso importante
-
-O **SHA-256** que aparece no arquivo e no rodape dos exports confere a
-**integridade do texto exportado** — nao a origem dele, nem a fidelidade ao que
-foi dito. A transcricao e produzida pelo motor de fala do Google ou da Microsoft,
-que voce nao controla nem audita.
-
-Para uso probatorio isso nao basta. O caminho seria bot proprio com STT sob seu
-controle e cadeia de custodia desde a captacao.
-
-**LGPD:** avise os participantes antes de transcrever.
-
-## Personalizar
-
-Todas as cores saem das variaveis `:root` no topo do `dashboard.css` — mexer
-nelas muda a interface **e** as cores do PDF (via a constante `BRAND` no
-`dashboard.js`).
-
-Paleta atual: indigo `#1a1454`, coral `#ff6b57` (e `#bb4f40` quando vira texto,
-para passar em 4.5:1 de contraste), violeta `#392a9c`.
-
-## Arquivos
-
-| | |
-|---|---|
-| `platform.js` | adaptadores de DOM (Meet / Teams) — o unico ponto fragil |
-| `content.js` | captura, deduplicacao, metadados, fim de reuniao |
-| `ui.js` | balao de status e modal de fim |
-| `background.js` | persistencia e abertura do arquivo |
-| `dashboard.*` | o arquivo de transcricoes |
-| `vendor/` | jsPDF (local: MV3 proibe script remoto) |
-| `icons/`, `brand/` | identidade visual |
+1. [Instalação da Extensão no Google Chrome](#1-instalação-da-extensão-no-google-chrome)
+2. [Configuração da Inteligência Artificial](#2-configuração-da-inteligência-artificial)
+   - [Opção A: IA Local 100% Privada e Gratuita (Ollama)](#opção-a-ia-local-100-privada-e-gratuita-ollama)
+   - [Opção B: IA Remota Gratuita via OpenRouter](#opção-b-ia-remota-gratuita-via-openrouter)
+   - [Opção C: IA Remota Gratuita via Google Gemini API](#opção-c-ia-remota-gratuita-via-google-gemini-api)
+   - [Opção D: Provedor Personalizado (OpenAI Compatível)](#opção-d-provedor-personalizado-openai-compatível)
+3. [Como Usar Durante a Reunião](#3-como-usar-durante-a-reunião)
+   - [Ligar Legendas nas Plataformas](#ligar-legendas-nas-plataformas)
+   - [Balão de Gravação](#balão-de-gravação)
+   - [Painel Flutuante de Live Analysis](#painel-flutuante-de-live-analysis)
+4. [Consulta de Histórico e Exportação (TXT e PDF)](#4-consulta-de-histórico-e-exportação-txt-e-pdf)
+5. [Controle de Versão e Rollback (Git)](#5-controle-de-versão-e-rollback-git)
+6. [Resolução de Problemas (Troubleshooting)](#6-resolução-de-problemas-troubleshooting)
 
 ---
 
-MeetExpert · Osvaldo Janeri Filho <osvaldo@perito.digital>
+## 1. Instalação da Extensão no Google Chrome
 
-## Novidades da 0.7.0
+A instalação é feita em menos de 1 minuto em modo desenvolvedor:
 
-- Teams: dominios `teams.cloud.microsoft` e `teams.microsoft.us`; seletores do Teams novo (v2);
-  varias reunioes na mesma aba (SPA); fim de reuniao por DOM com tolerancia a re-render;
-  liga as legendas pelo menu (Mais > Idioma e fala) e oferece o botao "Ligar legendas" no balao.
-- Legendas revisadas pelo ASR substituem o trecho (upsert por id) em vez de duplicar.
-- Cada reuniao tem registro proprio (links recorrentes do Meet nao se misturam mais).
-- Fila de gravacao no service worker (sem perda de trechos) e selo REC no icone.
-- Registros antigos (<0.7) continuam abrindo normalmente.
+1. Abra o navegador **Google Chrome**.
+2. Digite na barra de endereços: `chrome://extensions/` e pressione **Enter**.
+3. No canto superior direito, ative a chave **Modo do desenvolvedor**.
+4. No canto superior esquerdo, clique no botão **Carregar sem compactação** (ou *Load unpacked*).
+5. Selecione a pasta do projeto: `D:\MeetExpert` (a pasta que contém o arquivo `manifest.json`).
+6. **Fixe a extensão na barra do navegador**:
+   - Clique no ícone de quebra-cabeça (Extensões) ao lado da barra de endereços do Chrome.
+   - Localize o **MeetExpert** e clique no ícone de **alfinete** para deixá-lo sempre visível.
 
-## IA (0.7.1)
+> **Dica:** Sempre que fizer alterações no código da extensão, basta abrir `chrome://extensions/` e clicar no botão circular de **Recarregar** (🔄) no card do MeetExpert.
 
-No dashboard, **Copiar prompt IA** copia um prompt pronto (resumo, decisoes, pendencias com
-responsavel/prazo/timestamp, termos suspeitos do ASR) com a transcricao dentro. Cole no `claude`
-ou use `claude -p`. A transcricao vai marcada como dado (delimitador aleatorio) para que falas
-com "instrucoes" nao sejam obedecidas. Prefira rodar sem ferramentas/YOLO.
-Privacidade: o texto sai da sua maquina ao colar; `claude-ghost` usa gateway de terceiros.
-Renomear: clique no titulo ou em **Renomear**.
+---
+
+## 2. Configuração da Inteligência Artificial
+
+O MeetExpert permite que você escolha entre executar a IA **localmente no seu computador** (com total privacidade e conformidade com LGPD) ou através de **APIs gratuitas em nuvem**.
+
+Para acessar as configurações:
+1. Clique no ícone do **MeetExpert** na barra de ferramentas do Chrome.
+2. No topo do popup, clique no botão **⚙️ IA**.
+
+---
+
+### Opção A: IA Local 100% Privada e Gratuita (Ollama)
+
+Ideal para sigilo profissional absoluto (perícias, audiências, reuniões jurídicas ou corporativas confidenciais). Nenhum texto sai do seu computador.
+
+#### 1. Instalar o Ollama e Baixar o Modelo
+Criamos um instalador automático em lote para facilitar:
+1. Abra a pasta `D:\MeetExpert` no Windows Explorer.
+2. Dê **duplo-clique no arquivo `instalar-ia-local.bat`**.
+3. O script verificará se o Ollama está instalado:
+   - Se não estiver, solicitará autorização para instalar automaticamente via `winget`.
+4. Um menu interativo será exibido com as opções de modelos:
+   - **`1) Qwen 2.5 3B` (~1.9 GB) [RECOMENDADO]**: Ultra rápido, consome apenas ~2 GB de memória gráfica/RAM e tem excelente domínio da língua portuguesa.
+   - **`2) Llama 3.2 3B` (~2.0 GB)**: Rápido e leve, desenvolvido pela Meta.
+   - **`3) Qwen 2.5 7B` (~4.7 GB)**: Maior capacidade analítica para sínteses detalhadas e termos técnicos.
+   - **`4) Llama 3.1 8B` (~4.9 GB)**: Modelo robusto de 8 bilhões de parâmetros.
+5. Digite `1` e pressione **Enter**. O download iniciará e o modelo será registrado automaticamente no seu computador.
+
+#### 2. Ativar no MeetExpert
+1. No popup da extensão, na aba **⚙️ IA**, selecione o provedor: **Local — Ollama**.
+2. Clique no botão **Detectar** para carregar os modelos instalados no seu Ollama.
+3. Selecione o modelo baixado (ex: `qwen2.5:3b`).
+4. Clique em **Testar Conexão** (deve retornar `Conectado!`).
+5. Clique em **Salvar**.
+
+---
+
+### Opção B: IA Remota Gratuita via OpenRouter
+
+Ideal caso você prefira não ocupar espaço em disco ou rodar em computadores sem placa de vídeo dedicada.
+
+1. Acesse [openrouter.ai/keys](https://openrouter.ai/keys) e crie uma conta gratuita.
+2. Crie uma nova API Key (chave gratuita) e copie o código `sk-or-v1-...`.
+3. No popup do MeetExpert (**⚙️ IA**), selecione: **Remoto — OpenRouter (Modelos Free)**.
+4. Cole a sua chave no campo **API Key do OpenRouter**.
+5. Escolha o modelo gratuito desejado:
+   - `Google Gemini 2.0 Flash (Free)` &rarr; Respostas quase instantâneas.
+   - `Meta Llama 3.3 70B (Free)` &rarr; Altíssima inteligência e síntese profunda.
+   - `Qwen 2.5 72B (Free)` &rarr; Excelente para raciocínio complexo.
+6. Clique em **Testar Conexão** e depois em **Salvar**.
+
+---
+
+### Opção C: IA Remota Gratuita via Google Gemini API
+
+1. Acesse [aistudio.google.com](https://aistudio.google.com) e entre com sua conta Google.
+2. Clique em **Get API key** e copie a sua chave (`AIzaSy...`).
+3. No popup do MeetExpert (**⚙️ IA**), selecione: **Remoto — Google Gemini API (Gratuito)**.
+4. Cole a sua chave, selecione `Gemini 2.0 Flash`, teste a conexão e clique em **Salvar**.
+
+---
+
+### Opção D: Provedor Personalizado (OpenAI Compatível)
+
+Se você já utiliza ferramentas como **LM Studio**, **Jan**, **LocalAI** ou um servidor interno na sua rede:
+1. Selecione **Personalizado (OpenAI Compatível)**.
+2. Informe o endpoint completo (ex: `http://localhost:1234/v1/chat/completions`).
+3. Informe a API Key (se aplicável) e o nome do modelo carregado.
+4. Teste a conexão e salve.
+
+---
+
+### Personalização do Papel na Reunião
+Na seção **Preferências de Análise**, você pode indicar seu papel principal:
+- *Participante geral / Colaborador*
+- *Perito Judicial / Assistente Técnico especialista* (foco em provas, prazos e teses técnicas)
+- *Advogado / Jurídico* (foco em termos legais e acordos)
+- *Líder / Coordenador da reunião* (foco em encaminhamentos e decisões)
+
+A IA personalizará o vocabulário e o estilo das sugestões de fala para a função escolhida.
+
+---
+
+## 3. Como Usar Durante a Reunião
+
+### Ligar Legendas nas Plataformas
+
+O MeetExpert lê o texto gerado pelas próprias plataformas de videoconferência. Portanto, **as legendas precisam estar ligadas**:
+
+* **Google Meet**: Clique no botão **CC** na barra inferior (ou pressione a tecla `C`).
+* **Microsoft Teams (apenas versão Web)**:
+  - Acesse pelo navegador em `teams.microsoft.com`.
+  - Na barra de controles da chamada, clique em **Mais (...)** &rarr; **Idioma e fala** &rarr; **Ativar legendas ao vivo**.
+* **Zoom (apenas versão Web)**:
+  - Acesse pelo navegador através do link `app.zoom.us/wc/...` ("Entrar pelo navegador").
+  - Clique em **Mais (...)** &rarr; **Legendas**.
+
+---
+
+### Balão de Gravação
+
+Assim que você entra na chamada e as legendas começam a ser geradas, um balão flutuante estilizado aparece no canto inferior esquerdo:
+
+| Cor / Estado do Balão | Significado |
+|---|---|
+| **Cinza** | Aguardando detecção das legendas (ligue o CC se solicitado). |
+| **Vermelho pulsante** | **Gravando** — exibe a contagem de trechos capturados em tempo real. |
+| **Ambar** | Finalizando e salvando transcrição ao término da reunião. |
+| **Verde** | Salvo com sucesso. Oferece o botão para abrir a transcrição. |
+
+O balão conta com botões rápidos:
+- **Ver transcrição**: Abre a modal com a íntegra dos trechos falados até o momento.
+- **`⚡ Live Analysis`**: Abre ou fecha o painel inteligente de IA.
+
+---
+
+### Painel Flutuante de Live Analysis
+
+Ao clicar em **`⚡ Live Analysis`**, abre-se o painel flutuante no canto superior direito da reunião:
+
+1. **O que está acontecendo**:
+   - Resumo dinâmico de 2 a 4 linhas sobre o tópico debatido recentemente, apontando quem está com a palavra e quais são os pontos-chave.
+2. **Sugestão de fala (1ª pessoa)**:
+   - Sugestões acionáveis e pontuais para você participar da reunião (ex: *"Gostaria de solicitar que conste em ata o prazo para entrega do laudo complementar..."*).
+   - Destaque em verde claro quando há um momento oportuno de fala (perguntas abertas, solicitações de esclarecimento).
+3. **Histórico Expansível**:
+   - Clique em **`▸ Histórico`** para ver todas as sínteses geradas ao longo da chamada, ordenadas por horário.
+4. **Controles Inferiores**:
+   - **`↻ Atualizar`**: Força uma análise imediata da conversa atual.
+   - **Controle deslizante de intervalo**: Ajuste o intervalo de atualização automática entre 15 e 300 segundos (padrão: 60 segundos).
+   - **Contagem regressiva**: Mostra quanto tempo falta para a próxima análise automática ou o aviso *"processando..."*.
+5. **Movimentação e Ajuste**:
+   - **Arrastar**: Clique e segure no cabeçalho para posicionar o painel onde preferir na tela.
+   - **Minimizar (`—`)**: Recolhe o corpo do painel, mantendo apenas a barra de status visível.
+   - **Fechar (`×`)**: Fecha o painel de análise sem interromper a gravação da transcrição.
+
+---
+
+## 4. Consulta de Histórico e Exportação (TXT e PDF)
+
+### Popup Rápido
+Ao clicar no ícone do MeetExpert na barra de extensões:
+- A aba **Reuniões** lista todas as reuniões já gravadas, agrupadas cronologicamente.
+- Reuniões em andamento recebem o selo vermelho **REC**.
+- Cada gravação possui o botão **`.txt`** para download direto da transcrição limpa com falantes e timestamps.
+
+### Arquivo Completo e Exportação em PDF
+Clique no link **Abrir arquivo completo** no rodapé do popup para abrir o dashboard (`dashboard.html`):
+- **Busca textual**: Pesquise palavras-chave em todas as gravações simultaneamente.
+- **Edição de títulos**: Renomeie reuniões para fácil organização.
+- **Exportação em PDF**: Gera relatórios profissionais prontos para impressão ou arquivamento, formatados com metadados completos e o hash criptográfico **SHA-256**.
+- **Copiar Prompt IA**: Gera um prompt formatado com a transcrição completa para levar a qualquer assistente externo.
+
+---
+
+## 5. Controle de Versão e Rollback (Git)
+
+O código-fonte do projeto está versionado com Git para total segurança e flexibilidade:
+
+* **Versão 0.8.0 com Live Analysis**: Branch `feature/live-analysis`.
+* **Versão 0.7.3 Baseline Original**: Branch `master` e tag `v0.7.3-baseline`.
+
+### Como alternar entre versões ou fazer rollback:
+
+Abra o terminal PowerShell na pasta `D:\MeetExpert`:
+
+```powershell
+# Para retornar à versão original v0.7.3 (sem a IA integrada):
+git checkout v0.7.3-baseline
+
+# Para voltar para a versão mais recente v0.8.0 (com Live Analysis):
+git checkout feature/live-analysis
+```
+
+Após trocar de branch no Git, abra `chrome://extensions/` e clique em **Recarregar** (🔄) na extensão.
+
+---
+
+## 6. Resolução de Problemas (Troubleshooting)
+
+### A IA informa "Falha ao conectar ao Ollama":
+1. Verifique se o aplicativo do Ollama está em execução (ícone de lhama na barra de tarefas do Windows perto do relógio).
+2. Abra o terminal e teste digitando `ollama list`. Se responder normalmente, teste a conexão no popup da extensão.
+3. Se necessário, execute novamente `instalar-ia-local.bat`.
+
+### O balão flutuante não aparece na reunião:
+1. Certifique-se de que a reunião está aberta no navegador Chrome (e não no aplicativo de desktop do Teams ou Zoom).
+2. Verifique se as **legendas ao vivo** foram ativadas no Meet, Teams ou Zoom.
+3. Recarregue a página da reunião (`F5`). A extensão se conectará automaticamente.
+
+### As legendas mudaram de formato ou a fala ficou sem nome no Zoom:
+- No Zoom web, a legenda costuma mostrar apenas as iniciais do participante. O MeetExpert cruza automaticamente as iniciais com a lista de participantes da tela para deduzir o nome completo.
+- Se houver duas pessoas com as mesmas iniciais, a sigla será mantida para evitar atribuições incorretas.
+
+---
+
+## Licença e Aviso Legal
+
+* **Integridade SHA-256:** O hash presente nas exportações atesta a integridade do texto registrado localmente pela extensão, não constituindo perícia forense sobre o sinal acústico da chamada.
+* **LGPD e Privacidade:** Recomenda-se cientificar previamente os demais participantes sobre a realização da transcrição da reunião.
+
+MeetExpert · **Osvaldo Janeri Filho** `<osvaldo@perito.digital>`
