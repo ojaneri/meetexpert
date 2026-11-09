@@ -52,6 +52,8 @@ if (-not $ollamaCmd) {
 }
 
 Write-Host "[OK] Ollama detectado com sucesso!" -ForegroundColor Green
+[Environment]::SetEnvironmentVariable("OLLAMA_ORIGINS", "*", "User")
+$env:OLLAMA_ORIGINS = "*"
 Write-Host ""
 
 # 2. Menu de escolha de modelo
