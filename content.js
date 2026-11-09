@@ -64,11 +64,21 @@ if (!P) {
   /* -------------------- captura -------------------- */
 
   function findRoot() {
+    let best = null;
     for (const sel of P.captionRoot) {
-      const el = document.querySelector(sel);
-      if (el) return el;
+      try {
+        const candidates = document.querySelectorAll(sel);
+        for (const el of candidates) {
+          // Ignora botoes, barras de ferramentas, tooltips ou menus
+          if (el.closest("button, [role='button'], [role='toolbar'], [role='menu']")) continue;
+          if (el.getAttribute("role") === "button") continue;
+          const txt = (el.innerText || "").trim();
+          if (txt.length > 0) return el; // Prioriza o container que ja tem legendas visiveis
+          if (!best) best = el;
+        }
+      } catch (_) {}
     }
-    return null;
+    return best;
   }
 
   function speakerOf(block) {
@@ -81,7 +91,7 @@ if (!P) {
   }
 
   function textOf(block) {
-    // Se a plataforma tem um no dedicado ao texto (Teams), usa ele.
+    // Se a plataforma tem um no dedicado ao texto, usa ele.
     if (P.textSel) {
       const el = block.querySelector(P.textSel);
       if (el) return (el.innerText || "").replace(/\s+/g, " ").trim();
@@ -95,16 +105,21 @@ if (!P) {
   // Blocos de legenda. Se os seletores de classe quebrarem, cai numa heuristica
   // estrutural: sobe de cada no de texto ate o ancestral que tambem tem o autor.
   function captionBlocks() {
-    const found = [...S.root.querySelectorAll(P.captionBlock)];
-    if (found.length || !P.textSel) return found;
-    const out = new Set();
-    S.root.querySelectorAll(P.textSel).forEach((t) => {
-      let el = t.parentElement;
-      for (let i = 0; el && el !== S.root && i < 5; i++, el = el.parentElement) {
-        if (el.querySelector(P.speakerSel)) { out.add(el); break; }
-      }
-    });
-    return [...out];
+    if (!S.root) return [];
+    let found = [...S.root.querySelectorAll(P.captionBlock)];
+    found = found.filter((b) => !b.closest("button, [role='button'], [role='toolbar']"));
+    if (found.length) return found;
+    if (P.textSel) {
+      const out = new Set();
+      S.root.querySelectorAll(P.textSel).forEach((t) => {
+        let el = t.parentElement;
+        for (let i = 0; el && el !== S.root && i < 5; i++, el = el.parentElement) {
+          if (el.querySelector(P.speakerSel)) { out.add(el); break; }
+        }
+      });
+      if (out.size) return [...out];
+    }
+    return [...S.root.children].filter((c) => !c.closest("button, [role='button'], [role='toolbar']"));
   }
 
   // Bloco novo cujo texto ja foi gravado (o Teams recria elementos ao
@@ -154,7 +169,18 @@ if (!P) {
   }
 
   function scanBlocks() {
-    if (!S.root || !document.contains(S.root)) {
+    if (!S.root || !document.contains(S.root) || S.root.closest("button, [role='button'], [role='toolbar'], [role='menu']")) {
+      S.root = null;
+    }
+    // Se S.root esta vazio e outro candidato tem texto ativo, atualiza
+    if (S.root && !(S.root.innerText || "").trim()) {
+      const active = findRoot();
+      if (active && active !== S.root && (active.innerText || "").trim()) {
+        S.root = active;
+        attachToRoot();
+      }
+    }
+    if (!S.root) {
       const r = findRoot();
       if (r) {
         S.root = r;
@@ -162,7 +188,7 @@ if (!P) {
         if (!S.sawCaptions) {
           S.sawCaptions = true;
           MCG_UI.setState("capturing", {
-            text: "Legendas ligadas — aguardando fala",
+            text: "Legendas ligadas — gravando",
             actionLabel: "Ver transcrição",
             onAction: openLiveModal,
           });
@@ -511,7 +537,20 @@ if (!P) {
   /* -------------------- loop e live analysis -------------------- */
 
   MCG_UI.setLiveCallback(async ({ force }) => {
-    if (!S || !S.transcript.length) {
+    if (!S) {
+      MCG_UI.updateLiveAnalysis({
+        time: new Date().toTimeString().slice(0, 8),
+        summary: "Aguardando entrada em uma reunião...",
+        suggestion: ""
+      });
+      return;
+    }
+
+    // Varre o DOM e fecha os blocos atuais para incluir a fala mais recente
+    scanBlocks();
+    for (const entry of S.blocks.values()) flush(entry, true);
+
+    if (!S.transcript.length) {
       MCG_UI.updateLiveAnalysis({
         time: new Date().toTimeString().slice(0, 8),
         summary: "Aguardando as primeiras falas na reunião para sintetizar...",
@@ -519,10 +558,9 @@ if (!P) {
       });
       return;
     }
-    // Fecha os blocos atuais para incluir ate a ultima fala
-    for (const entry of S.blocks.values()) flush(entry, true);
 
     const recent = S.transcript.slice(-30);
+    console.log(`[MeetExpert Live AI] Enviando ${recent.length} trechos para análise:`, recent);
     try {
       chrome.runtime.sendMessage({ type: "LIVE_ANALYZE", entries: recent }, (res) => {
         if (chrome.runtime.lastError || !res || !res.ok) {

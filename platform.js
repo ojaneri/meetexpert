@@ -32,14 +32,19 @@ const MCG_PLATFORMS = {
     match: () => location.hostname === "meet.google.com",
 
     captionRoot: [
-      'div[role="region"][aria-label*="aption"]',
-      'div[role="region"][aria-label*="egenda"]',
-      'div[aria-label*="aption"]',
-      'div[aria-label*="egenda"]',
+      'div[role="region"][aria-label*="aption" i]',
+      'div[role="region"][aria-label*="egenda" i]',
+      'div[role="region"][aria-label*="ubtitle" i]',
+      'div[jsname="xySENc"]',
+      'div[jsname="r4nke"]',
+      'div[class*="a4cQT"]',
+      'div[class*="iTTPOb"]',
+      'div[aria-label*="aption" i]:not([role="button"]):not([role="toolbar"])',
+      'div[aria-label*="egenda" i]:not([role="button"]):not([role="toolbar"])',
     ],
-    captionBlock: ":scope > div",
-    speakerSel: '[data-self-name], [class*="name"], span:first-child',
-    textSel: null, // Meet nao tem no dedicado ao texto: usamos innerText - falante
+    captionBlock: 'div[class*="TBMuR"], div[class*="nMxHGf"], div[class*="bh44bd"], :scope > div',
+    speakerSel: '[data-self-name], [class*="zs75Bi"], [class*="name"], span:first-child',
+    textSel: '[class*="VbkSUe"], [class*="CNusmb"], [class*="yg7OAc"]',
 
     // Botao de legendas fica exposto na barra inferior do Meet.
     captionButtonAny: /captions|legendas/i,
