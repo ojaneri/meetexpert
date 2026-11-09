@@ -68,7 +68,7 @@ async function callLLMProvider(systemPrompt, userPrompt, config) {
 
   if (prov === "ollama") {
     const baseUrl = (config.ollamaUrl || "http://localhost:11434").replace(/\/+$/, "");
-    const res = await fetch(`${baseUrl}/v1/chat/completions`, {
+    const res = await fetch(`${baseUrl}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -77,7 +77,8 @@ async function callLLMProvider(systemPrompt, userPrompt, config) {
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ],
-        temperature: 0.3
+        stream: false,
+        options: { temperature: 0.3 }
       })
     });
     if (!res.ok) {
@@ -85,7 +86,7 @@ async function callLLMProvider(systemPrompt, userPrompt, config) {
       throw new Error(`Ollama HTTP ${res.status}: ${txt || res.statusText}`);
     }
     const data = await res.json();
-    return data.choices?.[0]?.message?.content || "";
+    return data.message?.content || "";
   }
 
   if (prov === "openrouter") {
