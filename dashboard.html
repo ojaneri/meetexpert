@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeetExpert — Arquivo de transcrições</title>
+<link rel="icon" href="brand/favicon.ico">
+<link rel="icon" href="icons/icon32.png">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <!-- wordmark da marca; se ausente, cai no bloco de fallback -->
+    <img class="wordmark" id="wordmark" src="brand/meetexpert-logo-dark.png" alt="MeetExpert">
+    <div class="brand-fallback" id="brandFallback" hidden>
+      <img src="icons/icon48.png" alt="" width="30" height="30">
+      <div>
+        <h1>MeetExpert</h1>
+        <p class="tagline">Arquivo de transcrições</p>
+      </div>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <span class="stat" id="stat"></span>
+    <button class="btn btn-ghost" id="purge">Apagar tudo</button>
+  </div>
+</header>
+
+<main class="vault">
+
+  <!-- painel esquerdo: lista -->
+  <aside class="rail">
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="Buscar por título, código ou participante"
+             autocomplete="off" aria-label="Buscar transcrições">
+    </div>
+    <ul class="records" id="records"></ul>
+    <footer class="credit">
+      MeetExpert · <a href="mailto:osvaldo@perito.digital">Osvaldo Janeri Filho</a>
+    </footer>
+  </aside>
+
+  <!-- painel direito: leitura -->
+  <section class="reader" id="reader">
+    <div class="empty" id="empty">
+      <img id="emptyMark" src="brand/meetexpert-logo-light.png" alt="" class="empty-mark">
+      <h2>Nenhuma transcrição aberta</h2>
+      <p id="emptyMsg">Selecione um registro à esquerda para ler e exportar.</p>
+    </div>
+
+    <article class="doc" id="doc" hidden>
+      <header class="doc-head">
+        <p class="eyebrow"><span id="dPlatform"></span> · <span id="dDate"></span></p>
+        <h2 id="dTitle" title="Clique para renomear" tabindex="0"></h2>
+        <input id="dTitleEdit" class="title-edit" type="text" maxlength="140" aria-label="Nome da reunião" hidden>
+        <dl class="facts">
+          <div><dt>Código</dt><dd id="dCode" class="mono"></dd></div>
+          <div><dt>Duração</dt><dd id="dDuration" class="mono"></dd></div>
+          <div><dt>Trechos</dt><dd id="dCount" class="mono"></dd></div>
+          <div class="wide"><dt>Participantes</dt><dd id="dPeople"></dd></div>
+        </dl>
+        <p class="partial-note" id="dPartial" hidden>
+          Registro parcial: a reunião foi encerrada sem fechar o arquivo (aba fechada, provavelmente).
+          Duração e participantes foram deduzidos dos próprios trechos.
+        </p>
+      </header>
+
+      <!-- elemento-assinatura: faixa de integridade -->
+      <div class="seal">
+        <span class="seal-label">Integridade do texto</span>
+        <code class="seal-hash mono" id="dHash">—</code>
+        <span class="seal-note">SHA-256 · confere o arquivo, não a origem</span>
+      </div>
+
+      <div class="doc-actions">
+        <button class="btn btn-primary" data-act="txt">Baixar .txt</button>
+        <button class="btn" data-act="pdf">Baixar .pdf</button>
+        <button class="btn" data-act="copy">Copiar</button>
+        <button class="btn" data-act="rename">Renomear</button>
+        <button class="btn" data-act="ai" title="Copia um prompt pronto (resumo, decisões, pendências) para colar no Claude">Copiar prompt IA</button>
+        <button class="btn btn-danger" data-act="del">Apagar</button>
+      </div>
+
+      <div class="transcript" id="dBody"></div>
+    </article>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="format.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>

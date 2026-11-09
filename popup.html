@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MeetExpert</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/icon32.png" width="20" height="20" alt="">
+    <h1>Reuniões gravadas</h1>
+    <span id="stat" class="stat"></span>
+  </header>
+
+  <ul id="meetings" class="meetings" aria-live="polite"></ul>
+
+  <footer>
+    <button id="openArchive" class="link">Abrir arquivo completo</button>
+    <span class="hint">PDF, busca e edição ficam no arquivo</span>
+  </footer>
+
+<script src="format.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

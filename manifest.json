@@ -1,0 +1,71 @@
+{
+  "manifest_version": 3,
+  "name": "MeetExpert",
+  "version": "0.7.3",
+  "description": "Captura as legendas ao vivo do Google Meet, do Microsoft Teams (web) e do Zoom (web) e arquiva transcricoes diarizadas com timestamps.",
+  "author": {
+    "email": "osvaldo@perito.digital"
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://meet.google.com/*",
+    "https://teams.microsoft.com/*",
+    "https://teams.live.com/*",
+    "https://teams.cloud.microsoft/*",
+    "https://*.teams.microsoft.us/*",
+    "https://*.zoom.us/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://meet.google.com/*",
+        "https://teams.microsoft.com/*",
+        "https://teams.live.com/*",
+        "https://teams.cloud.microsoft/*",
+        "https://*.teams.microsoft.us/*"
+      ],
+      "js": [
+        "platform.js",
+        "ui.js",
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://*.zoom.us/wc/*"
+      ],
+      "js": [
+        "platform.js",
+        "ui.js",
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_title": "MeetExpert — reunioes gravadas",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
