@@ -266,8 +266,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 Seu usuário tem o seguinte papel na reunião: "${roleDesc}".
 
 Diretrizes:
-1. "summary": Faça um resumo conciso de 2 a 4 linhas em português sobre o que está sendo debatido nos trechos recentes, identificando os pontos-chave e quem está conduzindo.
-2. "suggestion": Formule UMA sugestão pontual e pronta para falar em primeira pessoa ("ready-to-say") adequada ao papel do usuário, OU alerte se for um momento oportuno de intervenção (ex: perguntas abertas, discordâncias, pautas importantes). Se não houver necessidade de falar agora, deixe o texto amigável ou vazio.
+1. "summary": Faça um resumo conciso de 2 a 4 linhas sobre o que está sendo debatido nos trechos recentes, identificando os pontos-chave e quem está conduzindo. Escreva no idioma predominante da reunião (português, inglês, espanhol, etc.).
+2. "suggestion": Formule UMA sugestão pontual e pronta para falar em primeira pessoa ("ready-to-say") adequada ao papel do usuário, OU alerte se for um momento oportuno de intervenção.
+IMPORTANTE SOBRE O IDIOMA: A sugestão de fala DEVE estar OBRIGATORIAMENTE no mesmo idioma falado na reunião (ex: se a reunião for em inglês, a fala sugerida deve ser em inglês; se em português, em português), para que o usuário possa dizê-la na chamada. Se não for necessário intervir agora, deixe o texto sucinto ou vazio.
 
 IMPORTANTE: Responda APENAS em JSON válido no formato:
 {
